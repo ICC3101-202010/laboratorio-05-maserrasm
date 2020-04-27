@@ -13,7 +13,7 @@ namespace Solucion_Lab_21_abril
             Server server = new Server(database);
             MailSender mailSender = new MailSender();
             SMSSender smsSender = new SMSSender();
-
+            User defaultUser = new User();
 
             //Suscribir los que escuchan los eventos
             // Notar que para poder realizar las suscripciones es necesario tener instancias de las clases, y que los parametros
@@ -25,13 +25,17 @@ namespace Solucion_Lab_21_abril
             //3- Suscribir OnCambiadaContrasena de smsSender para que escuche el evento CambiadaContrasena enviado por servidor
             server.PasswordChanged += smsSender.OnPasswordChanged;
 
+            mailSender.EmailSent += defaultUser.onEmailSent;
+            defaultUser.EmailVerified += server.OnEmailVerified;
+
+
 
             // Controla la ejecucion mientras el usuario no quiera salir
             bool exec = true;
             while (exec)
             {
                 // Pedimos al usuario una de las opciones
-                string chosen = ShowOptions(new List<string>() { "Registrarse", "Cambiar contrasena", "Salir" });
+                string chosen = ShowOptions(new List<string>() { "Registrarse", "Cambiar contrasena","Verificar correo", "Salir" });
                 switch (chosen)
                 {
                     case "Registrarse":
@@ -42,6 +46,11 @@ namespace Solucion_Lab_21_abril
                         Console.Clear();
                         server.ChangePassword();
                         break;
+                    case "Verificar correo":
+                        Console.Clear();
+                        defaultUser.onEmailSent(defaultUser, null);
+                        break;
+
                     case "Salir":
                         exec = false;
                         break;

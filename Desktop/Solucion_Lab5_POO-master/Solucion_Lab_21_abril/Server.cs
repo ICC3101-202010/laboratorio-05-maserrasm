@@ -7,6 +7,20 @@ namespace Solucion_Lab_21_abril
 {
     public class Server
     {
+
+        public delegate void OnEmailVerifiedHandler(object source, EventArgs e);
+        public event OnEmailVerifiedHandler OnEmailVerifiedEvent;
+
+        public void OnEmailVerified(object source, EventArgs e)
+        {
+            if (OnEmailVerifiedEvent != null)
+                OnEmailVerifiedEvent(this, null);
+            Console.WriteLine("Mensaje pedido: Mail verificado correctamente !!");
+        }
+
+
+
+
         // Paso 1: Creamos el delegate para el evento del registro
         public delegate void RegisterEventHandler(object source, RegisterEventArgs args);
         // Paso 2: Creamos el evento que se engatilla cuando el usuario se registra
